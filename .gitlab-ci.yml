@@ -36,7 +36,7 @@ test:
   stage: test
   script:
     - gradle check
-    - gradle jacocoTestReport # Optional: Generate JaCoCo test coverage report
+
   cache:
     key: "$CI_COMMIT_REF_NAME"
     paths:
