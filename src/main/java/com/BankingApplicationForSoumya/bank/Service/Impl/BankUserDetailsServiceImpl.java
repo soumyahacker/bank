@@ -6,7 +6,9 @@ import com.BankingApplicationForSoumya.bank.dto.BankUsersdetailsDTO;
 import com.BankingApplicationForSoumya.bank.entity.BankUsersdetails;
 import com.BankingApplicationForSoumya.bank.repository.BankUserDetailsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+@Service
 public class BankUserDetailsServiceImpl implements BankUserDetailsService {
 
 
