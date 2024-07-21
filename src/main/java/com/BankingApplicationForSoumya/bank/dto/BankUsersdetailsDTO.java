@@ -1,51 +1,47 @@
-package com.BankingApplicationForSoumya.bank.entity;
+package com.BankingApplicationForSoumya.bank.dto;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import jakarta.persistence.Column;
+import lombok.Getter;
+
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
-@Entity
-@Table(name = "bank_user_details")
-public class BankUsersdetails {
 
-    @Id
-    @Column(name = "user_id")
+public class BankUsersdetailsDTO {
     private String userId;
 
-    @Column(name = "first_name")
+
     private String firstName;
 
-    @Column(name = "last_name")
+
     private String lastName;
 
-    @Column(name = "date_of_birth")
+
     private LocalDate dateOfBirth;
 
 
-    @Column(name = "state_province")
+
     private String state;  // Renamed to avoid potential conflict
 
-    @Column(name = "country")
+
     private String country;
 
-    @Column(name = "phone_number")
+
     private String phoneNumber;
 
 
-    @Column(name = "account_number")
+
     private String accountNumber;
 
-    @Column(name = "account_type")
+
     private String accountType;
 
-    @Column(name = "account_balance")
+
     private double accountBalance;
 
 
-    @Column(name = "annual_income")
     private double annualIncome;
 
     public String getUserId() {
@@ -135,8 +131,4 @@ public class BankUsersdetails {
     public void setAnnualIncome(double annualIncome) {
         this.annualIncome = annualIncome;
     }
-
 }
-
-
-
