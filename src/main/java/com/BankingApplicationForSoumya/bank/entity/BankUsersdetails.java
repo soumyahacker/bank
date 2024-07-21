@@ -7,7 +7,7 @@ import jakarta.persistence.Table;
 import java.util.Date;
 
 @Entity @Table(name = "BankUsersetails")
-public class BankUsersetails {
+public class BankUsersdetails {
 
     @Id
     private String userId;
