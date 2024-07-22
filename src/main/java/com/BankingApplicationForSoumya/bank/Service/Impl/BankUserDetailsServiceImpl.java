@@ -25,4 +25,12 @@ public class BankUserDetailsServiceImpl implements BankUserDetailsService {
 
         return BankUserDetailsMapping.MapToUserDetailtodto(bankUsersdetails1);
     }
+
+    @Override
+    public BankUsersdetailsDTO getBankDetailsbyId(int userId) {
+
+        BankUsersdetails bankUsersdetails = bankUserDetailsRepository.findById(userId).orElseThrow(()-> new RuntimeException("Account doesnt exist"));
+
+        return BankUserDetailsMapping.MapToUserDetailtodto(bankUsersdetails);
+    }
 }

@@ -6,4 +6,5 @@ import com.BankingApplicationForSoumya.bank.entity.BankUsersdetails;
 public interface BankUserDetailsService {
 
     abstract BankUsersdetailsDTO CreateAccountBank( BankUsersdetailsDTO bankUsersdetails);
+    abstract BankUsersdetailsDTO getBankDetailsbyId(int id);
 }

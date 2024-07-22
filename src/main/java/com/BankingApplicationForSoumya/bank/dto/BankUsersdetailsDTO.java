@@ -10,7 +10,15 @@ import java.time.LocalDate;
 
 
 public class BankUsersdetailsDTO {
-    private String userId;
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
+
+    private int userId;
 
 
     private String firstName;
@@ -44,13 +52,7 @@ public class BankUsersdetailsDTO {
 
     private double annualIncome;
 
-    public String getUserId() {
-        return userId;
-    }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
 
     public String getFirstName() {
         return firstName;

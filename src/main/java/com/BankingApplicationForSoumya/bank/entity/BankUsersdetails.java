@@ -11,9 +11,17 @@ import java.time.LocalDateTime;
 @Table(name = "bank_user_details")
 public class BankUsersdetails {
 
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
+
     @Id
     @Column(name = "user_id")
-    private String userId;
+    private int userId;
 
     @Column(name = "first_name")
     private String firstName;
@@ -48,13 +56,7 @@ public class BankUsersdetails {
     @Column(name = "annual_income")
     private double annualIncome;
 
-    public String getUserId() {
-        return userId;
-    }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
 
     public String getFirstName() {
         return firstName;

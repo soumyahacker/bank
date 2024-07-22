@@ -6,10 +6,7 @@ import com.BankingApplicationForSoumya.bank.dto.BankUsersdetailsDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/api/bankuserdetails")
@@ -21,14 +18,19 @@ public class BankController {
         this.bankUserDetailsService = bankUserDetailsService;
     }
 
+
     @PostMapping("/create")
     public ResponseEntity<BankUsersdetailsDTO> addAccount(@RequestBody BankUsersdetailsDTO bankUsersdetailsDTO){
 
         return new ResponseEntity<>(bankUserDetailsService.CreateAccountBank(bankUsersdetailsDTO), HttpStatus.CREATED);
     }
 
-//    @GetMapping("/search")
-//    public
+    @GetMapping("/search/{userId}")
+    public ResponseEntity<BankUsersdetailsDTO> SearchAccountbyID(@PathVariable int userId){
+        BankUsersdetailsDTO bankUsersdetailsDTO= bankUserDetailsService.getBankDetailsbyId(userId);
+
+        return ResponseEntity.ok(bankUsersdetailsDTO);
+    }
 
 
 }
