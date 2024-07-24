@@ -6,6 +6,7 @@ import jakarta.persistence.Table;
 import jakarta.persistence.Column;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Entity
 @Table(name = "bank_user_details")
@@ -52,11 +53,38 @@ public class BankUsersdetails {
     @Column(name = "account_balance")
     private double accountBalance;
 
+    @Override
+    public String toString() {
+        return "BankUsersdetails{" +
+                "userId=" + userId +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", dateOfBirth=" + dateOfBirth +
+                ", state='" + state + '\'' +
+                ", country='" + country + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", accountNumber='" + accountNumber + '\'' +
+                ", accountType='" + accountType + '\'' +
+                ", accountBalance=" + accountBalance +
+                ", annualIncome=" + annualIncome +
+                '}';
+    }
 
     @Column(name = "annual_income")
     private double annualIncome;
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        BankUsersdetails that = (BankUsersdetails) o;
+        return userId == that.userId && Double.compare(accountBalance, that.accountBalance) == 0 && Double.compare(annualIncome, that.annualIncome) == 0 && Objects.equals(firstName, that.firstName) && Objects.equals(lastName, that.lastName) && Objects.equals(dateOfBirth, that.dateOfBirth) && Objects.equals(state, that.state) && Objects.equals(country, that.country) && Objects.equals(phoneNumber, that.phoneNumber) && Objects.equals(accountNumber, that.accountNumber) && Objects.equals(accountType, that.accountType);
+    }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(userId, firstName, lastName, dateOfBirth, state, country, phoneNumber, accountNumber, accountType, accountBalance, annualIncome);
+    }
 
     public String getFirstName() {
         return firstName;
