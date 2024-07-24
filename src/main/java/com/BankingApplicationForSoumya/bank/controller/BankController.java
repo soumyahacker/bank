@@ -8,6 +8,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @Controller
 @RequestMapping("/api/bankuserdetails")
 public class BankController {
@@ -31,6 +33,19 @@ public class BankController {
 
         return ResponseEntity.ok(bankUsersdetailsDTO);
     }
+
+    @PutMapping("/deposit/{userId}")
+    public ResponseEntity<BankUsersdetailsDTO> depositMoneyToBank(@RequestBody Map<String, Double> request, @PathVariable int userId) {
+        // Extract amount from the request map
+        Double amount = request.get("amount");
+
+        // Call the service method to deposit money
+        BankUsersdetailsDTO bankUsersdetailsDTO = bankUserDetailsService.depositMoney(amount, userId);
+
+        // Return the response
+        return ResponseEntity.ok(bankUsersdetailsDTO);
+    }
+
 
 
 }

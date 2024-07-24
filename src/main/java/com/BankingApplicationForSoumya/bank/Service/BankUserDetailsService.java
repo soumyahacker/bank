@@ -7,4 +7,8 @@ public interface BankUserDetailsService {
 
     abstract BankUsersdetailsDTO CreateAccountBank( BankUsersdetailsDTO bankUsersdetails);
     abstract BankUsersdetailsDTO getBankDetailsbyId(int id);
+
+    abstract  BankUsersdetailsDTO depositMoney(double amount,int userId);
+
+
 }

@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.when;
 
 
 class BankUserDetailsServiceImplTest {
@@ -53,6 +54,15 @@ class BankUserDetailsServiceImplTest {
         user.setAnnualIncome(39000.0);
         return user;
     }
+
+//    @Test
+//    public  void  TestSearchBankAccount(){
+//        BankUsersdetailsDTO actual = getBankUsersdetailsDTO();
+//        when(bankUserDetailsService.getBankDetailsbyId(1)).thenReturn(actual);
+//        BankUsersdetailsDTO expected = bankController.SearchAccountbyID(11).getBody();
+//        assertEquals(expected,actual);
+//
+//    }
 
 
 }

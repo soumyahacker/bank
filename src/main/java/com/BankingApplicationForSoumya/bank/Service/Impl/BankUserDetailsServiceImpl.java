@@ -5,7 +5,6 @@ import com.BankingApplicationForSoumya.bank.Service.BankUserDetailsService;
 import com.BankingApplicationForSoumya.bank.dto.BankUsersdetailsDTO;
 import com.BankingApplicationForSoumya.bank.entity.BankUsersdetails;
 import com.BankingApplicationForSoumya.bank.repository.BankUserDetailsRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -33,4 +32,17 @@ public class BankUserDetailsServiceImpl implements BankUserDetailsService {
 
         return BankUserDetailsMapping.MapToUserDetailtodto(bankUsersdetails);
     }
+
+    @Override
+    public BankUsersdetailsDTO depositMoney(double amount, int userId) {
+        BankUsersdetails bankUsersdetails = bankUserDetailsRepository.findById(userId).orElseThrow(()-> new RuntimeException("Account doesnt exist"));
+        double totalBalance = bankUsersdetails.getAccountBalance() + amount;
+        bankUsersdetails.setAccountBalance(totalBalance);
+        BankUsersdetails SavedBankuserDetails =bankUserDetailsRepository.save(bankUsersdetails);
+        return BankUserDetailsMapping.MapToUserDetailtodto(SavedBankuserDetails);
+    }
+
+
+
+
 }
