@@ -10,5 +10,7 @@ public interface BankUserDetailsService {
 
     abstract  BankUsersdetailsDTO depositMoney(double amount,int userId);
 
+    abstract BankUsersdetailsDTO deleteBankDetailsbyID(int userId);
+
 
 }

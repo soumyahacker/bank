@@ -22,14 +22,14 @@ public class BankController {
 
 
     @PostMapping("/create")
-    public ResponseEntity<BankUsersdetailsDTO> addAccount(@RequestBody BankUsersdetailsDTO bankUsersdetailsDTO){
+    public ResponseEntity<BankUsersdetailsDTO> addAccount(@RequestBody BankUsersdetailsDTO bankUsersdetailsDTO) {
 
         return new ResponseEntity<>(bankUserDetailsService.CreateAccountBank(bankUsersdetailsDTO), HttpStatus.CREATED);
     }
 
     @GetMapping("/search/{userId}")
-    public ResponseEntity<BankUsersdetailsDTO> SearchAccountbyID(@PathVariable int userId){
-        BankUsersdetailsDTO bankUsersdetailsDTO= bankUserDetailsService.getBankDetailsbyId(userId);
+    public ResponseEntity<BankUsersdetailsDTO> SearchAccountbyID(@PathVariable int userId) {
+        BankUsersdetailsDTO bankUsersdetailsDTO = bankUserDetailsService.getBankDetailsbyId(userId);
 
         return ResponseEntity.ok(bankUsersdetailsDTO);
     }
@@ -45,6 +45,15 @@ public class BankController {
         // Return the response
         return ResponseEntity.ok(bankUsersdetailsDTO);
     }
+
+
+    @DeleteMapping("/delete/{userId}")
+    public ResponseEntity<BankUsersdetailsDTO> deleteBankaccountby(@PathVariable int userId) {
+        BankUsersdetailsDTO bankUsersdetailsDTO = bankUserDetailsService.deleteBankDetailsbyID(userId);
+
+        return ResponseEntity.ok(bankUsersdetailsDTO);
+    }
+
 
 
 
