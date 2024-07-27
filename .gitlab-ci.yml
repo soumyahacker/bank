@@ -1,23 +1,25 @@
-# .gitlab-ci.yml
-
-# Use the official Gradle image for the build stage
+# Use the official Gradle image
 image: gradle:alpine
 
+# Define global variables and caching settings
 variables:
   GRADLE_USER_HOME: "$CI_PROJECT_DIR/.gradle"
   JAVA_VERSION: 21
   GRADLE_OPTS: "-Dorg.gradle.daemon=false" # Disable Gradle daemon to avoid issues in CI
 
+# Cache settings to speed up builds
 cache:
   key: "$CI_COMMIT_REF_NAME"
   paths:
     - .gradle
     - build
 
+# Define the stages of the pipeline
 stages:
   - build
   - test
 
+# Build stage
 build:
   stage: build
   script:
@@ -29,17 +31,15 @@ build:
       - .gradle
       - build
 
+# Test stage
 test:
   stage: test
-  image: ruby:alpine # Use Ruby image for testing
   script:
-    - apk add --no-cache ruby-dev
-    - gem install bundler
-    - bundle install
-    - bundle exec rspec --format progress --format RspecJunitFormatter --out rspec.xml
-  artifacts:
-    when: always
+    - gradle check
+
+
+  cache:
+    key: "$CI_COMMIT_REF_NAME"
     paths:
-      - rspec.xml
-    reports:
-      junit: rspec.xml
+      - .gradle
+      - build
