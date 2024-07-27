@@ -46,7 +46,7 @@ public class BankUserDetailsServiceImpl implements BankUserDetailsService {
     public BankUsersdetailsDTO deleteBankDetailsbyID(int userId) {
         BankUsersdetails user = bankUserDetailsRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
-        // Convert entity to DTO if needed
+        //
         BankUsersdetailsDTO userDTO = BankUserDetailsMapping.MapToUserDetailtodto(user);
 
 
