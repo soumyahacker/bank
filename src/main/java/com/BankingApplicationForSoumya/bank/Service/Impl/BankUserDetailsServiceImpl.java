@@ -49,10 +49,13 @@ public class BankUserDetailsServiceImpl implements BankUserDetailsService {
         // Convert entity to DTO if needed
         BankUsersdetailsDTO userDTO = BankUserDetailsMapping.MapToUserDetailtodto(user);
 
-        // Delete the entity
+
         bankUserDetailsRepository.deleteById(userId);
         return userDTO;
+
     }
+
+
 
 
 }
