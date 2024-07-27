@@ -85,7 +85,7 @@ public class BankUserDetailsServiceImplTest {
         BankUsersdetailsDTO actual = getBankUsersdetailsDTO();
         BankUsersdetails bankUsersdetails = BankUserDetailsMapping.MapToUserDetailtoentity(actual);
         bankUsersdetails.setAccountBalance(bankUsersdetails.getAccountBalance() + amount);
-        //System.out.println(bankUsersdetails.getAccountBalance());
+
         when(bankUserDetailsRepository.findById(11)).thenReturn(Optional.of(bankUsersdetails));
         when(bankUserDetailsService.depositMoney(amount,11)).thenReturn(actual);
         BankUsersdetailsDTO expected = bankController.depositMoneyToBank(mockRequest,11).getBody();
