@@ -51,6 +51,7 @@ test:
 deploy:
   stage: deploy
   script:
+    - apk add --no-cache curl  # Install curl
     - echo "Deploying WAR file to Tomcat..."
     - curl -u "$TOMCAT_USER:$TOMCAT_PASS" \
       -T "$WAR_FILE" \
