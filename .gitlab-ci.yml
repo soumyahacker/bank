@@ -7,8 +7,8 @@ variables:
   JAVA_VERSION: 21
   GRADLE_OPTS: "-Dorg.gradle.daemon=false" # Disable Gradle daemon to avoid issues in CI
   TOMCAT_URL: "http://localhost:8085/manager/text"
-  TOMCAT_USER: "admin"
-  TOMCAT_PASS: "admin"
+  TOMCAT_USER: "$admin" # Load from GitLab CI/CD variables
+  TOMCAT_PASS: "$admin" # Load from GitLab CI/CD variables
   WAR_FILE: "build/libs/bank-1.war" # Update path if necessary
 
 # Cache settings to speed up builds
@@ -53,8 +53,14 @@ deploy:
   script:
     - apk add --no-cache curl  # Install curl
     - echo "Deploying WAR file to Tomcat..."
-    - curl -u "$TOMCAT_USER:$TOMCAT_PASS" \
-      -T "$WAR_FILE" \
-      "$TOMCAT_URL/deploy?path=/bank-1&update=true"
+    - |
+      if curl -u "$TOMCAT_USER:$TOMCAT_PASS" \
+         -T "$WAR_FILE" \
+         "$TOMCAT_URL/deploy?path=/bank-1&update=true"; then
+        echo "Deployment successful."
+      else
+        echo "Deployment failed."
+        exit 1
+      fi
   only:
     - main # Or the branch you want to deploy from
