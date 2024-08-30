@@ -6,7 +6,7 @@ variables:
   GRADLE_USER_HOME: "$CI_PROJECT_DIR/.gradle"
   JAVA_VERSION: 21
   GRADLE_OPTS: "-Dorg.gradle.daemon=false" # Disable Gradle daemon to avoid issues in CI
-  TOMCAT_URL: "http://<YOUR_TOMCAT_SERVER>:8080/manager/text"
+  TOMCAT_URL: "http://localhost:8085/manager/text"
   TOMCAT_USER: "admin"
   TOMCAT_PASS: "admin"
   WAR_FILE: "build/libs/bank-1.war" # Update path if necessary
