@@ -6,6 +6,10 @@ variables:
   GRADLE_USER_HOME: "$CI_PROJECT_DIR/.gradle"
   JAVA_VERSION: 21
   GRADLE_OPTS: "-Dorg.gradle.daemon=false" # Disable Gradle daemon to avoid issues in CI
+  TOMCAT_URL: "http://<YOUR_TOMCAT_SERVER>:8080/manager/text"
+  TOMCAT_USER: "admin"
+  TOMCAT_PASS: "admin"
+  WAR_FILE: "build/libs/bank-1.war" # Update path if necessary
 
 # Cache settings to speed up builds
 cache:
@@ -18,6 +22,7 @@ cache:
 stages:
   - build
   - test
+  - deploy
 
 # Build stage
 build:
@@ -36,10 +41,19 @@ test:
   stage: test
   script:
     - gradle check
-
-
   cache:
     key: "$CI_COMMIT_REF_NAME"
     paths:
       - .gradle
       - build
+
+# Deploy stage
+deploy:
+  stage: deploy
+  script:
+    - echo "Deploying WAR file to Tomcat..."
+    - curl -u "$TOMCAT_USER:$TOMCAT_PASS" \
+      -T "$WAR_FILE" \
+      "$TOMCAT_URL/deploy?path=/bank-1&update=true"
+  only:
+    - main # Or the branch you want to deploy from
