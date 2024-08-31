@@ -23,6 +23,7 @@ cache:
 stages:
   - build
   - test
+  - postman_test  # New stage for Postman tests
   - deploy
 
 # Build stage
@@ -47,6 +48,16 @@ test:
     paths:
       - .gradle
       - build
+
+# Postman Test stage
+postman_tests:
+  stage: postman_test  # Separate stage for Postman integration tests
+  image: postman/newman:latest
+  script:
+    - newman run postman/bankcollectionprod.postman_collection.json  # No environment specified
+  artifacts:
+    paths:
+      - newman  # Store the test reports or results if needed
 
 # Deploy to Railway
 deploy-railway:
