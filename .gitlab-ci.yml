@@ -3,6 +3,7 @@ image: gradle:alpine
 
 # Define global variables and caching settings
 variables:
+  RAILWAY_SERVICE_NAME: "banksoumya-production.up.railway.app"
   GRADLE_USER_HOME: "$CI_PROJECT_DIR/.gradle"
   JAVA_VERSION: 21
   GRADLE_OPTS: "-Dorg.gradle.daemon=false" # Disable Gradle daemon to avoid issues in CI
