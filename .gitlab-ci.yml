@@ -1,30 +1,27 @@
-# Use the official Gradle image
 image: gradle:alpine
 
-# Define global variables and caching settings
 variables:
   RAILWAY_SERVICE_NAME: "banksoumya"
   GRADLE_USER_HOME: "$CI_PROJECT_DIR/.gradle"
   JAVA_VERSION: 21
   GRADLE_OPTS: "-Dorg.gradle.daemon=false"
   TOMCAT_URL: "http://192.168.0.109:8085/manager/text"
-  TOMCAT_USER: "$admin"
-  TOMCAT_PASS: "$admin"
+  TOMCAT_USER: "${CI_DEPLOY_USER}"
+  TOMCAT_PASS: "${CI_DEPLOY_PASSWORD}"
   WAR_FILE: "build/libs/bank-1.war"
-  DAST_WEBSITE: https://staging.example.com # DAST target website
+  DAST_WEBSITE: https://staging.example.com
 
-# Cache settings to speed up builds
 cache:
   key: "$CI_COMMIT_REF_NAME"
   paths:
     - .gradle
     - build
 
-# Define the stages of the pipeline
 stages:
   - build
   - test
   - postman_test
+  - docker_build
   - deploy
   - dast
 
@@ -35,7 +32,6 @@ include:
   - template: Jobs/Secret-Detection.gitlab-ci.yml
   - template: Security/Dast.gitlab-ci.yml
 
-# Build stage
 build:
   stage: build
   script:
@@ -47,7 +43,6 @@ build:
       - .gradle
       - build
 
-# Test stage
 test:
   stage: test
   script:
@@ -58,7 +53,6 @@ test:
       - .gradle
       - build
 
-# Postman Test stage
 postman_tests:
   stage: postman_test
   image: postman/newman:latest
@@ -68,7 +62,17 @@ postman_tests:
     paths:
       - newman/report.json
 
-# Deploy to Railway
+docker-build:
+  stage: docker_build
+  image: docker:20.10.7
+  services:
+    - docker:dind
+  script:
+    - docker build -t registry.gitlab.com/soumya1144029/bank/main:$CI_COMMIT_SHA .
+    - docker push registry.gitlab.com/soumya1144029/bank/main:$CI_COMMIT_SHA
+  only:
+    - main
+
 deploy-railway:
   stage: deploy
   image: ubuntu
@@ -79,4 +83,3 @@ deploy-railway:
     - apt-get update && apt-get install -y curl
     - curl -fsSL https://railway.app/install.sh | sh
     - railway up --service=$RAILWAY_SERVICE_NAME -d
-
