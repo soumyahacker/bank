@@ -1,73 +1,91 @@
-# You can override the included template(s) by including variable overrides
-# SAST customization: https://docs.gitlab.com/ee/user/application_security/sast/#customizing-the-sast-settings
-# Secret Detection customization: https://docs.gitlab.com/ee/user/application_security/secret_detection/pipeline/#customization
-# Dependency Scanning customization: https://docs.gitlab.com/ee/user/application_security/dependency_scanning/#customizing-the-dependency-scanning-settings
-# Container Scanning customization: https://docs.gitlab.com/ee/user/application_security/container_scanning/#customizing-the-container-scanning-settings
-# Note that environment variables can be set in several places
-# See https://docs.gitlab.com/ee/ci/variables/#cicd-variable-precedence
-image: gradle:alpine
+# Base image for running Gradle tasks
+image: docker:20.10.16
+
+# Docker-In-Docker (DinD) service for running Docker commands
+services:
+  - docker:20.10.16-dind
+
 variables:
   RAILWAY_SERVICE_NAME: banksoumya
   GRADLE_USER_HOME: "$CI_PROJECT_DIR/.gradle"
   JAVA_VERSION: 21
   GRADLE_OPTS: "-Dorg.gradle.daemon=false"
   TOMCAT_URL: http://192.168.0.109:8085/manager/text
-  TOMCAT_USER: "$admin"
-  TOMCAT_PASS: "$admin"
+  TOMCAT_USER: "admin"
+  TOMCAT_PASS: "admin"
   WAR_FILE: build/libs/bank-1.war
   CS_IMAGE: "registry.gitlab.com/soumya1144029/bank:latest"
+  DOCKER_DRIVER: overlay2
+  DOCKER_TLS_CERTDIR: ""
+
+# Cache Gradle dependencies and build output
 cache:
   key: "$CI_COMMIT_REF_NAME"
   paths:
-  - ".gradle"
-  - build
+    - ".gradle"
+    - "build"
+
 stages:
-- build
-- test
-- postman_test
-- deploy
+  - build
+  - test
+  - postman_test
+  - deploy
+
+# Build stage
 build:
   stage: build
   script:
-  - gradle --version
-  - gradle --build-cache assemble
-  - docker build -t registry.gitlab.com/soumya1144029/bank:latest .
-  - docker push registry.gitlab.com/soumya1144029/bank:latest
+    - apk add --no-cache curl jq openjdk11 # Install necessary tools and Java
+    - curl -LO "https://services.gradle.org/distributions/gradle-8.10-bin.zip"
+    - unzip gradle-8.10-bin.zip
+    - export PATH=$PATH:./gradle-8.10/bin
+    - gradle --version
+    - gradle --build-cache assemble
+    - docker build -t registry.gitlab.com/soumya1144029/bank:latest .
+    - docker push registry.gitlab.com/soumya1144029/bank:latest
   cache:
     key: "$CI_COMMIT_REF_NAME"
     paths:
-    - ".gradle"
-    - build
+      - ".gradle"
+      - "build"
+
+# Test stage
 test:
   stage: test
   script:
-  - gradle check
+    - gradle check
   cache:
     key: "$CI_COMMIT_REF_NAME"
     paths:
-    - ".gradle"
-    - build
+      - ".gradle"
+      - "build"
+
+# Postman tests stage
 postman_tests:
   stage: postman_test
   image: postman/newman:latest
   script:
-  - newman run bankcollectionprod.postman_collection.json -r cli,json --reporter-json-export
-    newman/report.json
+    - newman run bankcollectionprod.postman_collection.json -r cli,json --reporter-json-export newman/report.json
   artifacts:
     paths:
-    - newman/report.json
+      - newman/report.json
+
+# Deployment to Railway stage
 deploy-railway:
   stage: deploy
-  image: ubuntu
+  image: ubuntu:latest
   only:
-  - pushes
-  - main
+    - pushes
+    - main
   script:
-  - apt-get update && apt-get install -y curl
-  - curl -fsSL https://railway.app/install.sh | sh
-  - railway up --service=$RAILWAY_SERVICE_NAME -d
+    - apt-get update && apt-get install -y curl
+    - curl -fsSL https://railway.app/install.sh | sh
+    - railway up --service=$RAILWAY_SERVICE_NAME -d
+
+# Include security and container scanning templates
 include:
-- template: Jobs/Container-Scanning.gitlab-ci.yml
-- template: Security/SAST.gitlab-ci.yml
+  - template: Jobs/Container-Scanning.gitlab-ci.yml
+  - template: Security/SAST.gitlab-ci.yml
+
 sast:
   stage: test
