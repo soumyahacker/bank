@@ -39,7 +39,7 @@ build:
       - .gradle
       - build
 
-# Test stage with security templates included
+# Test stage
 test:
   stage: test
   script:
@@ -49,10 +49,6 @@ test:
     paths:
       - .gradle
       - build
-  include:
-    - template: Jobs/Dependency-Scanning.gitlab-ci.yml
-    - template: Jobs/SAST.gitlab-ci.yml
-    - template: Jobs/Secret-Detection.gitlab-ci.yml
 
 # Postman Test stage
 postman_tests:
@@ -76,5 +72,9 @@ deploy-railway:
     - curl -fsSL https://railway.app/install.sh | sh
     - railway up --service=$RAILWAY_SERVICE_NAME -d
 
+# Include security templates for Dependency Scanning, SAST, Secret Detection, and DAST
 include:
+  - template: Jobs/Dependency-Scanning.gitlab-ci.yml
+  - template: Jobs/SAST.gitlab-ci.yml
+  - template: Jobs/Secret-Detection.gitlab-ci.yml
   - template: Security/DAST.gitlab-ci.yml
