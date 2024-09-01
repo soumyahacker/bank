@@ -26,6 +26,13 @@ stages:
   - test
   - postman_test
   - deploy
+  - dast
+
+include:
+  - template: Jobs/Dependency-Scanning.gitlab-ci.yml
+  - template: Jobs/Container-Scanning.gitlab-ci.yml
+  - template: Jobs/SAST.gitlab-ci.yml
+  - template: Jobs/Secret-Detection.gitlab-ci.yml
 
 # Build stage
 build:
@@ -72,9 +79,3 @@ deploy-railway:
     - curl -fsSL https://railway.app/install.sh | sh
     - railway up --service=$RAILWAY_SERVICE_NAME -d
 
-# Include security templates for Dependency Scanning, SAST, Secret Detection, and DAST
-include:
-  - template: Jobs/Dependency-Scanning.gitlab-ci.yml
-  - template: Jobs/SAST.gitlab-ci.yml
-  - template: Jobs/Secret-Detection.gitlab-ci.yml
-  - template: Security/DAST.gitlab-ci.yml
