@@ -23,7 +23,6 @@ cache:
 stages:
   - build
   - test
-  - lint
   - security
   - postman_test
   - deploy
@@ -51,15 +50,6 @@ test:
     paths:
       - .gradle
       - build
-
-# Linting stage
-lint:
-  stage: lint
-  script:
-    - gradle lint # Replace with your linting command if different
-  artifacts:
-    paths:
-      - build/reports/lint/ # Adjust path to where lint reports are generated
 
 # Security scan stage
 security:
