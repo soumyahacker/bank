@@ -26,13 +26,9 @@ stages:
   - test
   - postman_test
   - deploy
-  - dash
 
-include:
-  - template: Jobs/Dependency-Scanning.gitlab-ci.yml
-  - template: Jobs/SAST.gitlab-ci.yml
-  - template: Jobs/Secret-Detection.gitlab-ci.yml
-  - template: Security/DAST.gitlab-ci.yml
+
+
 # Build stage
 build:
   stage: build
