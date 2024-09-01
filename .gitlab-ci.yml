@@ -6,11 +6,12 @@ variables:
   RAILWAY_SERVICE_NAME: "banksoumya"
   GRADLE_USER_HOME: "$CI_PROJECT_DIR/.gradle"
   JAVA_VERSION: 21
-  GRADLE_OPTS: "-Dorg.gradle.daemon=false" # Disable Gradle daemon to avoid issues in CI
+  GRADLE_OPTS: "-Dorg.gradle.daemon=false"
   TOMCAT_URL: "http://192.168.0.109:8085/manager/text"
-  TOMCAT_USER: "$admin" # Load from GitLab CI/CD variables
-  TOMCAT_PASS: "$admin" # Load from GitLab CI/CD variables
-  WAR_FILE: "build/libs/bank-1.war" # Update path if necessary
+  TOMCAT_USER: "$admin"
+  TOMCAT_PASS: "$admin"
+  WAR_FILE: "build/libs/bank-1.war"
+  DAST_WEBSITE: https://staging.example.com # DAST target website
 
 # Cache settings to speed up builds
 cache:
@@ -38,7 +39,7 @@ build:
       - .gradle
       - build
 
-# Test stage
+# Test stage with security templates included
 test:
   stage: test
   script:
@@ -48,6 +49,10 @@ test:
     paths:
       - .gradle
       - build
+  include:
+    - template: Jobs/Dependency-Scanning.gitlab-ci.yml
+    - template: Jobs/SAST.gitlab-ci.yml
+    - template: Jobs/Secret-Detection.gitlab-ci.yml
 
 # Postman Test stage
 postman_tests:
@@ -70,3 +75,6 @@ deploy-railway:
     - apt-get update && apt-get install -y curl
     - curl -fsSL https://railway.app/install.sh | sh
     - railway up --service=$RAILWAY_SERVICE_NAME -d
+
+include:
+  - template: Security/DAST.gitlab-ci.yml
