@@ -11,7 +11,7 @@ variables:
   TOMCAT_USER: "$admin"
   TOMCAT_PASS: "$admin"
   WAR_FILE: "build/libs/bank-1.war"
-  DAST_WEBSITE: https://staging.example.com # DAST target website
+
 
 # Cache settings to speed up builds
 cache:
