@@ -24,6 +24,7 @@ cache:
 stages:
   - build
   - test
+  - integration_test
   - deploy
 
 # Build stage
@@ -43,6 +44,17 @@ test:
   stage: test
   script:
     - gradle check
+  cache:
+    key: "$CI_COMMIT_REF_NAME"
+    paths:
+      - .gradle
+      - build
+
+# Integration Test stage
+integration_test:
+  stage: integration_test
+  script:
+    - gradle integrationTest
   cache:
     key: "$CI_COMMIT_REF_NAME"
     paths:
