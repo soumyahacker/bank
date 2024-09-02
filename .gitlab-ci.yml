@@ -1,4 +1,8 @@
-image: gradle:alpine
+image: docker:latest
+
+services:
+  - docker:dind
+
 variables:
   RAILWAY_SERVICE_NAME: banksoumya
   GRADLE_USER_HOME: "$CI_PROJECT_DIR/.gradle"
@@ -8,17 +12,20 @@ variables:
   TOMCAT_USER: "$admin"
   TOMCAT_PASS: "$admin"
   WAR_FILE: build/libs/bank-1.war
+
 cache:
   key: "$CI_COMMIT_REF_NAME"
   paths:
     - ".gradle"
     - build
+
 stages:
   - build
   - test
   - postman_test
   - scan
   - deploy
+
 build:
   stage: build
   script:
@@ -29,6 +36,7 @@ build:
     paths:
       - ".gradle"
       - build
+
 test:
   stage: test
   script:
@@ -38,22 +46,22 @@ test:
     paths:
       - ".gradle"
       - build
+
 postman_tests:
   stage: postman_test
   image: postman/newman:latest
   script:
-    - newman run bankcollectionprod.postman_collection.json -r cli,json --reporter-json-export
-      newman/report.json
+    - newman run bankcollectionprod.postman_collection.json -r cli,json --reporter-json-export newman/report.json
   artifacts:
     paths:
       - newman/report.json
+
 trivy_scan:
   stage: scan
-  image: aquasec/trivy:latest
   script:
-    - trivy --version
     - docker build -t myapp:latest .
-    - trivy image myapp:latest
+    - docker run --rm -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy image myapp:latest
+
 deploy-railway:
   stage: deploy
   image: ubuntu
