@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: bank
+
+  datasource:
+    url: jdbc:mysql://mysql.railway.internal:3306/railway
+    username: root
+    password: BFyYrOZkTfhaVFNzCfCCnXZbtqkkSyFd
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+    hibernate:
+      ddl-auto: update
