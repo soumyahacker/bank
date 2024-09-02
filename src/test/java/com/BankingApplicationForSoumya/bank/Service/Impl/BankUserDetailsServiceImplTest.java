@@ -71,7 +71,7 @@ public class BankUserDetailsServiceImplTest {
         when(bankUserDetailsRepository.findById(11)).thenReturn(Optional.of(bankUsersdetails));
         when(bankUserDetailsService.getBankDetailsbyId(11)).thenReturn(actual);
 
-        BankUsersdetailsDTO expected = bankController.SearchAccountbyID(11).getBody();
+        BankUsersdetailsDTO expected = bankController.searchAccountByID(11).getBody();
 
         assertEquals(expected, actual);
     }
