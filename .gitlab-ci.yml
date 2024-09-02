@@ -1,16 +1,3 @@
-# You can override the included template(s) by including variable overrides
-# SAST customization: https://docs.gitlab.com/ee/user/application_security/sast/#customizing-the-sast-settings
-# Secret Detection customization: https://docs.gitlab.com/ee/user/application_security/secret_detection/pipeline/#customization
-# Dependency Scanning customization: https://docs.gitlab.com/ee/user/application_security/dependency_scanning/#customizing-the-dependency-scanning-settings
-# Container Scanning customization: https://docs.gitlab.com/ee/user/application_security/container_scanning/#customizing-the-container-scanning-settings
-# Note that environment variables can be set in several places
-# See https://docs.gitlab.com/ee/ci/variables/#cicd-variable-precedence
-
-# container_scanning:
-#   variables:
-#     DOCKER_IMAGE: ...
-#     DOCKER_USER: ...
-#     DOCKER_PASSWORD: ...
 image: gradle:alpine
 variables:
   RAILWAY_SERVICE_NAME: banksoumya
@@ -24,50 +11,56 @@ variables:
 cache:
   key: "$CI_COMMIT_REF_NAME"
   paths:
-  - ".gradle"
-  - build
+    - ".gradle"
+    - build
 stages:
-- build
-- test
-- postman_test
-- deploy
+  - build
+  - test
+  - postman_test
+  - scan
+  - deploy
 build:
   stage: build
   script:
-  - gradle --version
-  - gradle --build-cache assemble
+    - gradle --version
+    - gradle --build-cache assemble
   cache:
     key: "$CI_COMMIT_REF_NAME"
     paths:
-    - ".gradle"
-    - build
+      - ".gradle"
+      - build
 test:
   stage: test
   script:
-  - gradle check
+    - gradle check
   cache:
     key: "$CI_COMMIT_REF_NAME"
     paths:
-    - ".gradle"
-    - build
+      - ".gradle"
+      - build
 postman_tests:
   stage: postman_test
   image: postman/newman:latest
   script:
-  - newman run bankcollectionprod.postman_collection.json -r cli,json --reporter-json-export
-    newman/report.json
+    - newman run bankcollectionprod.postman_collection.json -r cli,json --reporter-json-export
+      newman/report.json
   artifacts:
     paths:
-    - newman/report.json
+      - newman/report.json
+trivy_scan:
+  stage: scan
+  image: aquasec/trivy:latest
+  script:
+    - trivy --version
+    - docker build -t myapp:latest .
+    - trivy image myapp:latest
 deploy-railway:
   stage: deploy
   image: ubuntu
   only:
-  - pushes
-  - main
+    - pushes
+    - main
   script:
-  - apt-get update && apt-get install -y curl
-  - curl -fsSL https://railway.app/install.sh | sh
-  - railway up --service=$RAILWAY_SERVICE_NAME -d
-include:
-- template: Jobs/Container-Scanning.gitlab-ci.yml
+    - apt-get update && apt-get install -y curl
+    - curl -fsSL https://railway.app/install.sh | sh
+    - railway up --service=$RAILWAY_SERVICE_NAME -d
