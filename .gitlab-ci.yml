@@ -11,6 +11,7 @@ variables:
   TOMCAT_USER: "$admin" # Load from GitLab CI/CD variables
   TOMCAT_PASS: "$admin" # Load from GitLab CI/CD variables
   WAR_FILE: "build/libs/bank-1.war" # Update path if necessary
+  SPRING_PROFILES_ACTIVE: prod  # Ensure the 'prod' profile is active
 
 # Cache settings to speed up builds
 cache:
@@ -59,3 +60,6 @@ deploy-railway:
     - apt-get update && apt-get install -y curl
     - curl -fsSL https://railway.app/install.sh | sh
     - railway up --service=$RAILWAY_SERVICE_NAME -d
+  environment:
+    name: production
+    url: https://$CI_PROJECT_NAME.$RAILWAY_SERVICE_NAME.app
