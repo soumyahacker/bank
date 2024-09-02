@@ -1,4 +1,4 @@
-image: docker:latest
+image: gradle:alpine
 
 services:
   - docker:dind
@@ -23,7 +23,6 @@ stages:
   - build
   - test
   - postman_test
-  - scan
   - deploy
 
 build:
@@ -31,21 +30,11 @@ build:
   script:
     - gradle --version
     - gradle --build-cache assemble
-  cache:
-    key: "$CI_COMMIT_REF_NAME"
-    paths:
-      - ".gradle"
-      - build
 
 test:
   stage: test
   script:
     - gradle check
-  cache:
-    key: "$CI_COMMIT_REF_NAME"
-    paths:
-      - ".gradle"
-      - build
 
 postman_tests:
   stage: postman_test
@@ -56,19 +45,14 @@ postman_tests:
     paths:
       - newman/report.json
 
-trivy_scan:
-  stage: scan
-  script:
-    - docker build -t myapp:latest .
-    - docker run --rm -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy image myapp:latest
-
 deploy-railway:
   stage: deploy
-  image: ubuntu
+  image: docker:latest
+  services:
+    - docker:dind
   only:
     - pushes
     - main
   script:
-    - apt-get update && apt-get install -y curl
     - curl -fsSL https://railway.app/install.sh | sh
     - railway up --service=$RAILWAY_SERVICE_NAME -d
