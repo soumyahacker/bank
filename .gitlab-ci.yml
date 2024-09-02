@@ -70,6 +70,6 @@ deploy-railway:
   - apt-get update && apt-get install -y curl
   - curl -fsSL https://railway.app/install.sh | sh
   - railway up --service=$RAILWAY_SERVICE_NAME -d
-  - export SPRING_PROFILES_ACTIVE=prod
+
 include:
 - template: Jobs/Container-Scanning.gitlab-ci.yml
