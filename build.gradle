@@ -1,9 +1,24 @@
+buildscript {
+
+	buildscript {
+		repositories {
+			mavenCentral()
+			jcenter()
+			maven { url 'https://repo.spring.io/plugins-release' } // Optional repo
+			maven { url 'https://jitpack.io' } // Optional repo for custom dependencies
+		}
+		dependencies {
+			classpath 'com.github.jacobono:gradle-jaxb-plugin:1.3.5'
+		}
+	}
+}
+
 plugins {
 	id 'java'
 	id 'org.springframework.boot' version '3.3.2'
 	id 'io.spring.dependency-management' version '1.1.6'
-
-
+	id("org.openrepose.gradle.plugins.jaxb") version "2.5.0"
+	id 'maven-publish'
 }
 
 group = 'com.BankingApplicationForSoumya'
@@ -23,26 +38,16 @@ configurations {
 
 repositories {
 	mavenCentral()
-	maven { url 'https://repo.spring.io/milestone' }
+	maven { url 'https://repo.spring.io/milestone' } // only if you need milestone versions
+
 }
 
-
+//apply plugin: 'com.github.jacobono.jaxb'
 
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	//implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
-	//providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
-	//implementation 'com.okta.spring:okta-spring-boot-starter:3.0.7'
-	// Spring Boot Starter Web
-
-
-	// Springfox Swagger2
-	//implementation 'io.springfox:springfox-swagger2:3.0.0'
-
-	// Springfox Swagger UI
-	//implementation 'io.springfox:springfox-swagger-ui:3.0.0'
 	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0'
 	implementation 'org.springdoc:springdoc-openapi-starter-common:2.6.0'
 	compileOnly 'org.projectlombok:lombok'
@@ -50,20 +55,28 @@ dependencies {
 	runtimeOnly 'com.mysql:mysql-connector-j'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	//testImplementation 'org.springframework.security:spring-security-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 	implementation 'com.fasterxml.jackson.core:jackson-databind:2.17.0'
 	implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.17.0'
-	//implementation 'io.springfox:springfox-swagger2:3.0.0'
-	//implementation 'io.springfox:springfox-swagger-ui:3.0.0'
-	implementation 'io.springfox:springfox-boot-starter:3.0.0'
+	implementation 'org.springframework.boot:spring-boot-starter-web-services:3.3.3'
+	implementation 'wsdl4j:wsdl4j:1.6.3'
 
-
-
+	jaxb 'com.sun.xml.bind:jaxb-xjc:2.2.7-b41'
+	jaxb 'com.sun.xml.bind:jaxb-impl:2.2.7-b41'
+	jaxb 'javax.xml.bind:jaxb-api:2.2.7'
+	jaxb "org.jvnet.jaxb2_commons:jaxb2-basics-ant:0.6.5"
+	jaxb "org.jvnet.jaxb2_commons:jaxb2-basics:0.6.4"
+	jaxb "org.jvnet.jaxb2_commons:jaxb2-basics-annotate:0.6.4"
+	jaxb "org.jvnet.jaxb2_commons:jaxb2-value-constructor:3.0"
 }
 
-dependencyManagement {
-
+jaxb {
+	System.setProperty('javax.xml.accessExternalSchema', 'all') // To solve external schema dependencies
+	xsdDir = "src/main/resources/" // XSD directory
+	xjc {
+		taskClassname = "org.jvnet.jaxb2_commons.xjc.XJC2Task" // For setter plugin
+		args = ["-Xsetters", "-Xsetters-mode=direct"]
+	}
 }
 
 bootRun {
