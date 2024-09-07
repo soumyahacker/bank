@@ -15,14 +15,3 @@ C:\spring project\bank\src\main\java\com\BankingApplicationForSoumya\bank\Servic
 C:\spring project\bank\src\main\java\com\BankingApplicationForSoumya\bank\Service\Impl\BankLoginDetailsUserServiceImpl.java
 C:\spring project\bank\src\main\java\com\BankingApplicationForSoumya\bank\Service\Impl\BankUserDetailsServiceImpl.java
 C:\spring project\bank\src\main\java\com\BankingApplicationForSoumya\bank\util\BankUserDetailsJsonParser.java
-C:\spring project\bank\src\main\java\com\BankingApplicationForSoumya\webservice\GetLoanStatusRequest.java
-C:\spring project\bank\src\main\java\com\BankingApplicationForSoumya\webservice\GetLoanStatusResponse.java
-C:\spring project\bank\src\main\java\com\BankingApplicationForSoumya\webservice\LoanDetailsEntity.java
-C:\spring project\bank\src\main\java\com\BankingApplicationForSoumya\webservice\LoanDetailsRepository.java
-C:\spring project\bank\src\main\java\com\BankingApplicationForSoumya\webservice\LoanStatusEndpoint.java
-C:\spring project\bank\src\main\java\com\BankingApplicationForSoumya\webservice\ObjectFactory.java
-C:\spring project\bank\src\main\java\com\BankingApplicationForSoumya\webservice\package-info.java
-C:\spring project\bank\src\main\java\com\example\loan\GetLoanStatusRequest.java
-C:\spring project\bank\src\main\java\com\example\loan\GetLoanStatusResponse.java
-C:\spring project\bank\src\main\java\com\example\loan\ObjectFactory.java
-C:\spring project\bank\src\main\java\com\example\loan\package-info.java
